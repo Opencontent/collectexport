@@ -1,0 +1,21 @@
+h1. Collected information Export
+
+Original written by Brookins Consulting at http://projects.ez.no/cie/
+
+Upgraded to eZ Publish 4.5 by Gerhard Sletten for use at Norseman triathlon site: http://www.nxtri.com
+
+h2. Installation
+
+Download or clone and placed in your extension folder, and activated through eZ Publish interface.
+
+h2. Usage
+
+And additional tab in your Admin-interface will appear. Click this one an follow instructions.
+
+h2. Changelog
+
+Added support for the following datatypes:
+
+* Enchanted ezboolean showing either Yes og No
+* ezcountry - only support single section
+* ezoption - only support single section
