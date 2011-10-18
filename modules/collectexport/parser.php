@@ -23,19 +23,21 @@ var $exportableDatatypes;
 	function getExportableDatatypes() {
 		return $this->exportableDatatypes;
 	}
-	
+	function exportAttributeHeader(&$attribute, $seperationChar) {
+		$contentClassAttribute = $attribute->contentClassAttribute();
+		return $contentClassAttribute->Identifier;
+	}
 	function exportAttribute(&$attribute, $seperationChar) {
-            $ret = false;
-	    $objectAttribute = $attribute->contentObjectAttribute();
-	    $handler=$this->handlerMap[$objectAttribute->DataTypeString]['handler'];
-
-		/* For debug new data types
-				if($objectAttribute->DataTypeString == 'ezcountry') {
-					print_r( $objectAttribute->content() );
-					print_r( $attribute );
-				}
-	    */
-
+		$ret = false;
+		$objectAttribute = $attribute->contentObjectAttribute();
+		$handler=$this->handlerMap[$objectAttribute->DataTypeString]['handler'];
+		/*
+		if($objectAttribute->DataTypeString == 'ezcountry' and $attribute->DataText == 'PA') {
+			print_r( $objectAttribute );
+			print_r( $attribute );
+			print_r( $attribute->content() );
+		}
+		*/
 	    if( $attribute && $seperationChar )
 	    { 
 	      if( is_object( $handler ) )
@@ -49,9 +51,18 @@ var $exportableDatatypes;
 
 	    return $ret;	
 	}
-
+	function exportCollectionObjectHeaderNew(&$collection, &$attributes_to_export, $seperationChar) {
+		$resultstring = array();
+		$attributes2=$collection->informationCollectionAttributes();
+		foreach ($attributes2 as $currentattribute2) {
+			array_push($resultstring,$this->exportAttributeHeader($currentattribute2, $seperationChar));
+		}
+		return $resultstring;
+	}
 	function exportCollectionObject(&$collection, &$attributes_to_export, $seperationChar) {
 		$resultstring = array();
+		
+			
 		foreach ($attributes_to_export as $attributeid) {
 			if ($attributeid == "contentobjectid") {
 				array_push($resultstring,$collection->ID);
@@ -97,6 +108,7 @@ var $exportableDatatypes;
             case "csv" :
 		        $returnstring = array();
 			// TODO: Refactor foreach into method
+			array_push($returnstring, $this->exportCollectionObjectHeaderNew($collections[0], $attributes_to_export, $seperationChar));
         		foreach ($collections as $collection) {
 			  if( $days != false )
 			  {
@@ -113,7 +125,7 @@ var $exportableDatatypes;
 			         print_r( "\n##################################" );
 			         // die();
 			      */
-
+				
 			      if( $ci_created < $current_datestamp && $ci_created >= $range ){
 				// print_r( "\nCI Date is lt current date and CI Date is gt eq range \n" );
 				array_push($returnstring, $this->exportCollectionObject($collection, $attributes_to_export, $seperationChar));
@@ -164,6 +176,8 @@ var $exportableDatatypes;
         	default:
         	    $export_type='csv';
 		        $returnstring = array();
+				
+				//array_push($returnstring, $this->exportCollectionObjectHeader($attributes_to_export));
 			// TODO: Refactor foreach into method
         		foreach ($collections as $collection) {
                           if( $days != false )
