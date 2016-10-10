@@ -1,11 +1,9 @@
 <?php
-include_once('extension/collectexport/modules/collectexport/parser.php');
-
 class eZSelectionHandler extends BaseHandler{
        function exportAttribute(&$attribute, $seperationChar) {
 	        $ret = false;
                 
-		$content=&$attribute->content();
+		$content=$attribute->content();
 		$selectionID=$content[0];
 
 		// $selectionAttribute=&$attribute["ContentObjectAttributeID"];
@@ -15,7 +13,7 @@ class eZSelectionHandler extends BaseHandler{
 		if( isset( $contentClassAttributeContent['options'] ) )
 		{
 		    $options = $contentClassAttributeContent['options'];
-		    $selectionOptionName = $options[$selectionID]['name'];
+		    $selectionOptionName = isset( $options[$selectionID]['name'] ) ? $options[$selectionID]['name'] : '';
 
 		    // print("\n\nBegin Options \n\n");
 		    // print("Selection: $selectionID\n");

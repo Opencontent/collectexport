@@ -1,7 +1,5 @@
 <?php
 
-include_once('extension/collectexport/modules/collectexport/basehandler.php');
-
 class eZCountryHandler extends BaseHandler {
 	function exportAttribute(&$attribute, $seperationChar) {
 		$ret = false;

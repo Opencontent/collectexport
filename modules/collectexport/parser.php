@@ -1,9 +1,5 @@
 <?php
 
-include_once('lib/ezutils/classes/ezini.php');
-include_once('extension/collectexport/modules/collectexport/basehandler.php');
-include_once('kernel/classes/ezcontentobjecttreenode.php');
-
 class Parser {
 
 var $handlerMap=array();
@@ -23,46 +19,36 @@ var $exportableDatatypes;
 	function getExportableDatatypes() {
 		return $this->exportableDatatypes;
 	}
-	function exportAttributeHeader(&$attribute, $seperationChar) {
-		$contentClassAttribute = $attribute->contentClassAttribute();
-		return $contentClassAttribute->Identifier;
-	}
-	function exportAttribute(&$attribute, $seperationChar) {
-		$ret = false;
-		$objectAttribute = $attribute->contentObjectAttribute();
-		$handler=$this->handlerMap[$objectAttribute->DataTypeString]['handler'];
-		/*
-		if($objectAttribute->DataTypeString == 'ezcountry' and $attribute->DataText == 'PA') {
-			print_r( $objectAttribute );
-			print_r( $attribute );
-			print_r( $attribute->content() );
-		}
-		*/
-	    if( $attribute && $seperationChar )
-	    { 
-	      if( is_object( $handler ) )
-	      {
-		if( $handler->exportAttribute($attribute, $seperationChar) )
-		  $ret = $handler->exportAttribute($attribute, $seperationChar);
-	      }
-	    } else {
-	      $ret = false;
-	    }
+	
+	function exportAttribute(&$attribute, $seperationChar)
+	{
 
-	    return $ret;	
+	    $handler=$this->handlerMap[eZContentClassAttribute::dataTypeByID( $attribute->ContentClassAttributeID )]['handler'];
+
+	    /*
+		BC: Error Debug Comment Test Case Output
+
+                echo ( '<hr />' );
+                print_r( $objectAttribute->DataTypeString );
+                echo ( '<hr />' );
+                print_r( $objectAttribute );
+                echo ( '<hr />' );		
+                print_r( $this->handlerMap );
+                echo ( '<hr />' );
+	    */
+
+	    if( $attribute && $seperationChar && is_object( $handler ))
+	    { 
+            $ret = $handler->exportAttribute($attribute, $seperationChar);
+	    }
+        if ( is_null( $ret ) )
+	       return false;
+	    else
+	       return $ret;	
 	}
-	function exportCollectionObjectHeaderNew(&$collection, &$attributes_to_export, $seperationChar) {
-		$resultstring = array();
-		$attributes2=$collection->informationCollectionAttributes();
-		foreach ($attributes2 as $currentattribute2) {
-			array_push($resultstring,$this->exportAttributeHeader($currentattribute2, $seperationChar));
-		}
-		return $resultstring;
-	}
+
 	function exportCollectionObject(&$collection, &$attributes_to_export, $seperationChar) {
 		$resultstring = array();
-		
-			
 		foreach ($attributes_to_export as $attributeid) {
 			if ($attributeid == "contentobjectid") {
 				array_push($resultstring,$collection->ID);
@@ -70,8 +56,10 @@ var $exportableDatatypes;
 			    array_push($resultstring,"");
 			} else if ($attributeid != -2) {
 				$attributes=$collection->informationCollectionAttributes();
-				foreach ($attributes as $currentattribute) {
-					if ( ((int) $attributeid)== ((int) $currentattribute->ContentClassAttributeID) ) {
+				foreach ($attributes as $currentattribute)
+				{
+					if ( ((int) $attributeid)== ((int) $currentattribute->ContentClassAttributeID) )
+					{
 					    array_push($resultstring,$this->exportAttribute($currentattribute, $seperationChar));
 					}
 				}
@@ -80,17 +68,20 @@ var $exportableDatatypes;
 		return $resultstring;
 	}
 
-	function exportCollectionObjectHeader(&$attributes_to_export) {
+	function exportCollectionObjectHeader( &$attributes_to_export ) {
 		$resultstring = array();
-		foreach($attributes_to_export as $attributeid)
+		foreach( $attributes_to_export as $attributeid )
 		{
-			if ($attributeid == "contentobjectid") {
-				array_push($resultstring,"ID");
-			} else if ($attributeid == -1) {
-			    array_push($resultstring,"");
-			} else if ($attributeid != -2) {
-			    $attribute = & eZContentClassAttribute::fetch($attributeid);
-			    array_push( $resultstring, $attribute->name() );
+			if ( $attributeid == "contentobjectid" ) {
+				array_push( $resultstring, "ID" );
+			} else if ( $attributeid == -1 ) {
+			    array_push( $resultstring, "" );
+			} else if ( $attributeid != -2 ) {
+			    $attribute = & eZContentClassAttribute::fetch( $attributeid );
+                            $attribute_name = $attribute->name();
+                            $attribute_name_escaped = preg_replace( "(\r\n|\n|\r)", " ", $attribute_name );
+                            $attribute_name_escaped = utf8_decode( $attribute_name_escaped );
+                            array_push( $resultstring, $attribute_name_escaped );   
 
 			    // works for 3.8 only
 			    // array_push($resultstring,$attribute->Name);
@@ -102,13 +93,12 @@ var $exportableDatatypes;
 
 	function exportInformationCollection( $collections, $attributes_to_export, $seperationChar, $export_type='csv', $days ) {
 
-        eZDebug::writeDebug($attributes_to_export);
+        // eZDebug::writeDebug($attributes_to_export);
 
         switch($export_type){
             case "csv" :
 		        $returnstring = array();
 			// TODO: Refactor foreach into method
-			array_push($returnstring, $this->exportCollectionObjectHeaderNew($collections[0], $attributes_to_export, $seperationChar));
         		foreach ($collections as $collection) {
 			  if( $days != false )
 			  {
@@ -125,7 +115,7 @@ var $exportableDatatypes;
 			         print_r( "\n##################################" );
 			         // die();
 			      */
-				
+
 			      if( $ci_created < $current_datestamp && $ci_created >= $range ){
 				// print_r( "\nCI Date is lt current date and CI Date is gt eq range \n" );
 				array_push($returnstring, $this->exportCollectionObject($collection, $attributes_to_export, $seperationChar));
@@ -176,8 +166,6 @@ var $exportableDatatypes;
         	default:
         	    $export_type='csv';
 		        $returnstring = array();
-				
-				//array_push($returnstring, $this->exportCollectionObjectHeader($attributes_to_export));
 			// TODO: Refactor foreach into method
         		foreach ($collections as $collection) {
                           if( $days != false )

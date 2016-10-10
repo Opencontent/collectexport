@@ -29,12 +29,6 @@
 // of this licencing isn't clear to you.
 //
 
-include_once( 'lib/ezutils/classes/ezini.php' );
-include_once( 'extension/collectexport/classes/export.php' );
-
-
-// Settings
-
 $ini = eZINI::instance( "cie.ini" );
 
 $debug = $ini->hasVariable( 'CieSettings', 'Debug' ) ? $ini->variable( 'CieSettings', 'Debug' ) == 'enabled' : false;
