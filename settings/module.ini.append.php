@@ -1,2 +1,6 @@
+<?php /*
+
 [ModuleSettings]
 ExtensionRepositories[]=collectexport
+
+*/ ?>

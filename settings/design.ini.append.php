@@ -1,2 +1,6 @@
+<?php /*
+
 [ExtensionSettings]
 DesignExtensions[]=collectexport
+
+*/ ?>
