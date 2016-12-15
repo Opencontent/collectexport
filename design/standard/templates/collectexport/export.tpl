@@ -16,6 +16,44 @@
 
 <fieldset>
         <legend>{'Export'|i18n( 'design/collectexport/export' )}</legend>
+<div class="block">
+<div class="element">
+{'Start Date'|i18n( 'design/collectexport/export' )}
+</div>
+
+<div class="element">
+<label>{'Day'|i18n( 'design/collectexport/export' )}:</label>
+<input name="start_day" class="box" size="3" value="{$start_day|wash}" />
+</div>
+
+<div class="element">
+<label>{'Month'|i18n( 'design/collectexport/export' )}:</label>
+<input  name="start_month" class="box" size="3" value="{$start_month|wash}" />
+</div>
+
+<div class="element">
+<label>{'Year'|i18n( 'design/collectexport/export' )}:</label>
+<input name="start_year" class="box" size="5" value="{$start_year|wash}" />
+</div>
+<div class="element">
+{'End Date'|i18n( 'design/collectexport/export' )}
+</div>
+
+<div class="element">
+<label>{'Day'|i18n( 'design/collectexport/export' )}:</label>
+<input name="end_day" class="box" size="3" value="{$end_day|wash}" />
+</div>
+
+<div class="element">
+<label>{'Month'|i18n( 'design/collectexport/export' )}:</label>
+<input  name="end_month" class="box" size="3" value="{$end_month|wash}" />
+</div>
+
+<div class="element">
+<label>{'Year'|i18n( 'design/collectexport/export' )}:</label>
+<input name="end_year" class="box" size="5" value="{$end_year|wash}" />
+</div>
+</div>
 <div align="right"> 
 {section show=$collection_array}
 <input class="button" style="position:relative;top:-10px;" type="submit" name="DoExport" value="{'Do export'|i18n( 'design/collectexport/export' )}" title="{'Do export.'|i18n( 'design/collectexport/export' )}" />
@@ -40,7 +78,7 @@
         <fieldset>
         <legend>{'Field #%counter'|i18n('design/collectexport/export',, hash( '%counter', $counter) )}</legend>
             <select name="field_{$counter}">
-                <option selected "value="contentobjectid">{'Content object id'|i18n('design/collectexport/export')}</option>
+                <option selected="selected" value="contentobjectid">{'Content object id'|i18n('design/collectexport/export')}</option>
                 {section loop=$class.data_map}
                         {let current_inner_attribute=$:item}
                                 {section show=$current_inner_attribute.is_information_collector }
@@ -60,13 +98,13 @@
                                 <fieldset>
                                 <legend>{'Field #%counter'|i18n('design/collectexport/export',, hash( '%counter', $counter) )}</legend>
                                     <select name="field_{$counter}">
-                                        <option selected "value="contentobjectid">Content object id</option>
+                                        <option selected="selected" value="contentobjectid">Content object id</option>
                                 
                                         {section loop=$class.data_map}
                                                 {let current_inner_attribute=$:item}
                                                         {section show=$current_inner_attribute.is_information_collector }
                                                                 {section show=$current_inner_attribute.id|eq($current_attribute.id)}
-                                                                        <option selected value="{$current_inner_attribute.id}">{$current_inner_attribute.name} [{$current_inner_attribute.id}] </option>
+                                                                        <option selected="selected" value="{$current_inner_attribute.id}">{$current_inner_attribute.name} [{$current_inner_attribute.id}] </option>
                                                                 {section-else}
                                                                         <option value="{$current_inner_attribute.id}">{$current_inner_attribute.name} [{$current_inner_attribute.id}] </option>
                                                                 {/section}
@@ -93,11 +131,11 @@
 </fieldset>
 <fieldset>
 	<legend>{'Separation char for CSV export'|i18n('design/collectexport/export')}</legend>
-	<input type="radio" name="separation_char" checked="true" value=";"/> Semicolon (';') <br/>
-	<input type="radio" name="separation_char" value=","/> Comma (',') <br/>
-	<input type="radio" name="separation_char" value=":"/> Colon (':') <br/>
-	<input type="radio" name="separation_char" value="|"/> Pipe ('|') <br/>
-	<input type="radio" name="separation_char" value="#"/> Hash ('#') <br/>
+	<input type="radio" name="separation_char" checked="true" value=";"/> {'Semicolon'|i18n('design/collectexport/export')} (';') <br/>
+	<input type="radio" name="separation_char" value=","/> {'Comma'|i18n('design/collectexport/export')} (',') <br/>
+	<input type="radio" name="separation_char" value=":"/> {'Colon'|i18n('design/collectexport/export')} (':') <br/>
+	<input type="radio" name="separation_char" value="|"/> {'Pipe'|i18n('design/collectexport/export')} ('|') <br/>
+	<input type="radio" name="separation_char" value="#"/> {'Hash'|i18n('design/collectexport/export')} ('#') <br/>
 </fieldset>
 
 {section-else}

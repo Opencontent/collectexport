@@ -1,4 +1,3 @@
-<?php /*
 [NavigationPart]
 Part[collectexport]=Export
 
@@ -19,6 +18,4 @@ Shown[]
 Shown[default]=true
 Shown[navigation]=true
 Shown[browse]=true
-
-*/ ?>
 

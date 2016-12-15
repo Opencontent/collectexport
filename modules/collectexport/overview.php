@@ -1,12 +1,11 @@
 <?php
-ini_set('display_errors', 1);
+
 include_once( 'kernel/common/template.php' );
 include_once( 'kernel/classes/ezpreferences.php' );
 include_once( 'kernel/classes/ezinformationcollection.php' );
-include_once( 'kernel/common/i18n.php' );
 
 $http = eZHTTPTool::instance();
-$module =& $Params['Module'];
+$module = $Params['Module'];
 $offset = $Params['Offset'];
 
 if( !is_numeric( $offset ) )
@@ -27,15 +26,15 @@ if( $module->isCurrentAction( 'RemoveObjectCollection' ) && $http->hasPostVariab
         $collections += eZInformationCollection::fetchCollectionCountForObject( $objectID );
     }
 
-    $tpl =& templateInit();
+    $tpl =& eZTemplate::factory();
     $tpl->setVariable( 'module', $module );
     $tpl->setVariable( 'collections', $collections );
     $tpl->setVariable( 'remove_type', 'objects' );
 
     $Result = array();
-    $Result['content'] =& $tpl->fetch( 'design:infocollector/confirmremoval.tpl' );
+    $Result['content'] = $tpl->fetch( 'design:infocollector/confirmremoval.tpl' );
     $Result['path'] = array( array( 'url' => false,
-                                    'text' => ezi18n( 'kernel/infocollector', 'Collected information' ) ) );
+                                    'text' => ezpI18n::tr( 'kernel/infocollector', 'Collected information' ) ) );
     return;
 }
 
@@ -43,7 +42,7 @@ if( $module->isCurrentAction( 'RemoveObjectCollection' ) && $http->hasPostVariab
 if( $module->isCurrentAction( 'ConfirmRemoval' ) )
 {
 
-    $objectIDArray =& $http->sessionVariable( 'ObjectIDArray' );
+    $objectIDArray = $http->sessionVariable( 'ObjectIDArray' );
 
     if( is_array( $objectIDArray) )
     {
@@ -109,8 +108,8 @@ foreach ( array_keys( $objects ) as $i )
                                                                   false, /* sortArray */
                                                                   false  /* asObject */
                                                                  );
-
-    $objects[$i]['class_name'] = eZContentClassNameList::nameFromSerializedString( $objects[$i]['serialized_name_list'] );
+    $class = new eZContentClass( $objects[$i] );
+    $objects[$i]['class_name'] = $class->attribute( 'name' );
     $first = $collections[0]['created'];
     $last  = $first;
 
@@ -132,7 +131,7 @@ foreach ( array_keys( $objects ) as $i )
 
 $viewParameters = array( 'offset' => $offset );
 
-$tpl = templateInit();
+$tpl = eZTemplate::factory();
 $tpl->setVariable( 'module', $module );
 $tpl->setVariable( 'limit', $limit );
 $tpl->setVariable( 'view_parameters', $viewParameters );
@@ -143,6 +142,6 @@ $Result = array();
 $Result['content'] = $tpl->fetch( 'design:collectexport/overview.tpl' );
 $Result['left_menu'] = 'design:collectexport/export_menu.tpl';
 $Result['path'] = array( array( 'url' => false,
-                                'text' => ezi18n( 'extension/collectexport', 'Collected information export' ) ) );
+                                'text' => ezpI18n::tr( 'extension/collectexport', 'Collected information export' ) ) );
 
 ?>

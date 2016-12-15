@@ -1,4 +1,5 @@
 <?php
+include_once('extension/collectexport/modules/collectexport/parser.php');
 
 class eZOptionHandler extends BaseHandler{
        function exportAttribute(&$attribute, $seperationChar) {
