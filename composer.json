@@ -1,0 +1,24 @@
+{
+    "name": "opencontent/collectexport-ls",
+    "description": "OpenContent Collectexport (forked from gerhardsletten/collectexport, original written by Brookins Consulting)",
+    "type": "ezpublish-legacy-extension",
+    "authors": [        
+        {
+            "name": "OpenContent",
+            "homepage": "http://www.opencontent.it"
+        },
+        {
+            "name": "Brookins Consulting",
+            "homepage": "http://projects.ez.no/cie/"
+        }
+    ],
+    "license": "GPL-2.0",    
+    "minimum-stability": "dev",
+    "require": {
+        "ezsystems/ezpublish-legacy-installer": "*"
+    },
+    "extra": {
+        "ezpublish-legacy-extension-name": "collectexport"
+    }
+}
+
