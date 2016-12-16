@@ -45,20 +45,20 @@ elseif ( $start === false and $end !== false )
 }
 set_time_limit( 180 );
 $collections = eZPersistentObject::fetchObjectList( eZInformationCollection::definition(),
-                                                      null,
-                                                      $conditions,
-                                                      false,
-                                                      false );
+    null,
+    $conditions,
+    false,
+    false );
 
 $counter=0;
 $attributes_to_export=array();
 while (true) {
-	$currentattribute=$http->postVariable("field_$counter");
-	if (!$currentattribute) {
-		break;
-	}
-	$attributes_to_export[]=$currentattribute;
-	$counter++;
+    $currentattribute=$http->postVariable("field_$counter");
+    if (!$currentattribute) {
+        break;
+    }
+    $attributes_to_export[]=$currentattribute;
+    $counter++;
 }
 
 $seperation_char = $http->postVariable("separation_char");
@@ -80,13 +80,12 @@ switch($export_type){
     default :
         $filename = "export_". $date_export .".csv";
         break;
-    }
+}
 header("Content-Disposition: attachment; filename=$filename");
 
 $export_string=$parser->exportInformationCollection( $collections, $attributes_to_export, $seperation_char, $export_type, $objectID);
 
 echo($export_string);
-flush();
+
 eZExecution::cleanExit();
 
-?>
