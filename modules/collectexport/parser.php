@@ -5,7 +5,7 @@ class Parser {
 var $handlerMap=array();
 var $exportableDatatypes;
 
-	function Parser() {
+	function __construct() {
 		$ini = eZINI::instance( "export.ini" );
 		$this->exportableDatatypes=$ini->variable( "General", "ExportableDatatypes" );
 		foreach ($this->exportableDatatypes as $typename) {
